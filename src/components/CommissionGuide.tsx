@@ -157,7 +157,7 @@ export default function CommissionGuide() {
                 <h4 className="font-medium text-gray-300 mb-2">Personal Quota & Commission</h4>
                 <ul className="space-y-1 text-sm text-gray-400">
                   <li>• Personal Quota: <span className="font-semibold">60 deals/month</span></li>
-                  <li>• Initial Sale: <span className="font-semibold text-green-600">$350 per sale</span></li>
+                  <li>• Initial Sale: <span className="font-semibold text-green-600">$300 per sale</span></li>
                   <li>• MRR: <span className="font-semibold text-blue-400">$50/month per active client</span></li>
                 </ul>
               </div>
