@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Play, Clock, CheckCircle, Lock, ChevronRight, Lightbulb, Target, TrendingUp } from 'lucide-react';
+import { Play, Clock, CheckCircle, Lock, ChevronRight, Lightbulb, Target, TrendingUp, Volume2 } from 'lucide-react';
 
 export const CourseModules: React.FC = () => {
   const [completedModules, setCompletedModules] = useState<string[]>(['module-1']);
@@ -10,18 +10,20 @@ export const CourseModules: React.FC = () => {
       id: 'module-1',
       title: 'SaaS Fundamentals',
       description: 'Understanding the foundation of Software as a Service',
-      duration: '45 min',
+      duration: '60 min',
       icon: Lightbulb,
       color: 'from-blue-500 to-blue-600',
       lessons: [
-        { title: 'What is SaaS?', duration: '12 min', videoId: 'dQw4w9WgXcQ' },
-        { title: 'SaaS vs Traditional Software', duration: '15 min', videoId: 'dQw4w9WgXcQ' },
-        { title: 'The SaaS Business Model', duration: '18 min', videoId: 'dQw4w9WgXcQ' },
+        { title: 'What is SaaS?', duration: '12 min', audioFile: '/src/assets/audio/what_is_saas.m4a' },
+        { title: 'SaaS vs Traditional Software', duration: '15 min', audioFile: '/src/assets/audio/saas_traditional.m4a' },
+        { title: 'The SaaS Business Model', duration: '18 min', audioFile: '/src/assets/audio/saas_businessmodel.m4a' },
+        { title: 'SaaS Selling', duration: '15 min', audioFile: '/src/assets/audio/selling_saas.m4a' },
       ],
       keyTakeaways: [
         'SaaS delivers software over the internet, eliminating installation hassles',
         'Subscription models create predictable revenue streams',
-        'Scalability and accessibility are SaaS superpowers'
+        'Scalability and accessibility are SaaS superpowers',
+        'SaaS selling requires a consultative approach focused on business outcomes'
       ]
     },
     {
@@ -32,9 +34,9 @@ export const CourseModules: React.FC = () => {
       icon: Target,
       color: 'from-green-500 to-emerald-600',
       lessons: [
-        { title: 'Understanding SaaS Sales Cycles', duration: '20 min', videoId: 'dQw4w9WgXcQ' },
-        { title: 'Value-Based Selling Approach', duration: '25 min', videoId: 'dQw4w9WgXcQ' },
-        { title: 'Handling Objections & Concerns', duration: '15 min', videoId: 'dQw4w9WgXcQ' },
+        { title: 'Understanding SaaS Sales Cycles', duration: '20 min', audioFile: '/src/assets/audio/understanding_saas_cycle.m4a' },
+        { title: 'Value-Based Selling Approach', duration: '25 min', audioFile: '/src/assets/audio/value_based_selling.m4a' },
+        { title: 'Handling Objections & Concerns', duration: '15 min', audioFile: '/src/assets/audio/objections_concerns.m4a' },
       ],
       keyTakeaways: [
         'Focus on ROI and business outcomes, not features',
@@ -153,14 +155,26 @@ export const CourseModules: React.FC = () => {
                           >
                             <div className="flex items-center space-x-3">
                               <div className="w-10 h-10 bg-gray-700 rounded-lg flex items-center justify-center group-hover:bg-blue-600 transition-colors">
-                                <Play className="w-4 h-4" />
+                                {lesson.audioFile ? (
+                                  <Volume2 className="w-4 h-4" />
+                                ) : (
+                                  <Play className="w-4 h-4" />
+                                )}
                               </div>
                               <div>
                                 <p className="font-medium">{lesson.title}</p>
                                 <p className="text-sm text-gray-400">{lesson.duration}</p>
                               </div>
                             </div>
-                            <ChevronRight className="w-4 h-4 text-gray-500 group-hover:text-white" />
+                            <div className="flex items-center space-x-2">
+                              {lesson.audioFile && (
+                                <audio controls className="max-w-xs">
+                                  <source src={lesson.audioFile} type="audio/mp4" />
+                                  Your browser does not support the audio element.
+                                </audio>
+                              )}
+                              <ChevronRight className="w-4 h-4 text-gray-500 group-hover:text-white" />
+                            </div>
                           </div>
                         ))}
                       </div>
