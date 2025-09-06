@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Search, Menu, X, Target, Award, FileText, Home } from 'lucide-react';
-import logoImage from '../assets/inboundai365-logo.png';
 
 interface HeaderProps {
   activeSection: string;
@@ -30,7 +29,7 @@ export const Header: React.FC<HeaderProps> = ({ activeSection, setActiveSection 
               className="cursor-pointer hover:opacity-80 transition-opacity"
             >
               <img 
-                src={logoImage} 
+                src="/inboundai365-logo.png" 
                 alt="InboundAI365" 
                 className="h-8 w-auto"
               />
