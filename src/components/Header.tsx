@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Search, Menu, X, Target, Award, FileText, Home } from 'lucide-react';
-import logoImage from '../assets/IB (500 x 50 px) (350 x 50 px) (1).png';
+import logoImage from '../assets/inboundai365-logo.png';
 
 interface HeaderProps {
   activeSection: string;
