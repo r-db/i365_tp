@@ -1,9 +1,20 @@
 import React, { useState } from 'react';
-import { Play, Clock, CheckCircle, Lock, ChevronRight, Lightbulb, Target, TrendingUp, Volume2 } from 'lucide-react';
+import { Play, Clock, CheckCircle, Lock, ChevronRight, Lightbulb, Target, TrendingUp, Volume2, Pause } from 'lucide-react';
+
+// Import audio files
+import whatIsSaasAudio from '/src/assets/audio/what_is_saas.m4a';
+import saasTraditionalAudio from '/src/assets/audio/saas_traditional.m4a';
+import saasBusinessModelAudio from '/src/assets/audio/saas_businessmodel.m4a';
+import sellingSaasAudio from '/src/assets/audio/selling_saas.m4a';
+import understandingSaasCycleAudio from '/src/assets/audio/understanding_saas_cycle.m4a';
+import valueBasedSellingAudio from '/src/assets/audio/value_based_selling.m4a';
+import objectionsConcernsAudio from '/src/assets/audio/objections_concerns.m4a';
 
 export const CourseModules: React.FC = () => {
   const [completedModules, setCompletedModules] = useState<string[]>(['module-1']);
   const [expandedModule, setExpandedModule] = useState<string | null>(null);
+  const [currentlyPlaying, setCurrentlyPlaying] = useState<string | null>(null);
+  const [audioElements, setAudioElements] = useState<{[key: string]: HTMLAudioElement}>({});
 
   const modules = [
     {
@@ -14,10 +25,10 @@ export const CourseModules: React.FC = () => {
       icon: Lightbulb,
       color: 'from-blue-500 to-blue-600',
       lessons: [
-        { title: 'What is SaaS?', duration: '12 min', audioFile: '/src/assets/audio/what_is_saas.m4a' },
-        { title: 'SaaS vs Traditional Software', duration: '15 min', audioFile: '/src/assets/audio/saas_traditional.m4a' },
-        { title: 'The SaaS Business Model', duration: '18 min', audioFile: '/src/assets/audio/saas_businessmodel.m4a' },
-        { title: 'SaaS Selling', duration: '15 min', audioFile: '/src/assets/audio/selling_saas.m4a' },
+        { id: 'what-is-saas', title: 'What is SaaS?', duration: '12 min', audioFile: whatIsSaasAudio },
+        { id: 'saas-traditional', title: 'SaaS vs Traditional Software', duration: '15 min', audioFile: saasTraditionalAudio },
+        { id: 'saas-business', title: 'The SaaS Business Model', duration: '18 min', audioFile: saasBusinessModelAudio },
+        { id: 'saas-selling', title: 'SaaS Selling', duration: '15 min', audioFile: sellingSaasAudio },
       ],
       keyTakeaways: [
         'SaaS delivers software over the internet, eliminating installation hassles',
@@ -34,9 +45,9 @@ export const CourseModules: React.FC = () => {
       icon: Target,
       color: 'from-green-500 to-emerald-600',
       lessons: [
-        { title: 'Understanding SaaS Sales Cycles', duration: '20 min', audioFile: '/src/assets/audio/understanding_saas_cycle.m4a' },
-        { title: 'Value-Based Selling Approach', duration: '25 min', audioFile: '/src/assets/audio/value_based_selling.m4a' },
-        { title: 'Handling Objections & Concerns', duration: '15 min', audioFile: '/src/assets/audio/objections_concerns.m4a' },
+        { id: 'saas-cycles', title: 'Understanding SaaS Sales Cycles', duration: '20 min', audioFile: understandingSaasCycleAudio },
+        { id: 'value-selling', title: 'Value-Based Selling Approach', duration: '25 min', audioFile: valueBasedSellingAudio },
+        { id: 'objections', title: 'Handling Objections & Concerns', duration: '15 min', audioFile: objectionsConcernsAudio },
       ],
       keyTakeaways: [
         'Focus on ROI and business outcomes, not features',
@@ -52,9 +63,9 @@ export const CourseModules: React.FC = () => {
       icon: TrendingUp,
       color: 'from-purple-500 to-indigo-600',
       lessons: [
-        { title: 'The AI Market Explosion', duration: '15 min', videoId: 'dQw4w9WgXcQ' },
-        { title: 'Why Businesses Need AI Now', duration: '20 min', videoId: 'dQw4w9WgXcQ' },
-        { title: 'Positioning AI as Essential', duration: '15 min', videoId: 'dQw4w9WgXcQ' },
+        { id: 'ai-market', title: 'The AI Market Explosion', duration: '15 min', videoId: 'dQw4w9WgXcQ' },
+        { id: 'ai-need', title: 'Why Businesses Need AI Now', duration: '20 min', videoId: 'dQw4w9WgXcQ' },
+        { id: 'ai-positioning', title: 'Positioning AI as Essential', duration: '15 min', videoId: 'dQw4w9WgXcQ' },
       ],
       keyTakeaways: [
         'AI SaaS market projected to reach $118B by 2025',
@@ -77,6 +88,48 @@ export const CourseModules: React.FC = () => {
   const isModuleUnlocked = (moduleIndex: number) => {
     if (moduleIndex === 0) return true;
     return completedModules.includes(modules[moduleIndex - 1].id);
+  };
+
+  const playAudio = (lessonId: string, audioFile: string) => {
+    // Stop any currently playing audio
+    if (currentlyPlaying && audioElements[currentlyPlaying]) {
+      audioElements[currentlyPlaying].pause();
+      audioElements[currentlyPlaying].currentTime = 0;
+    }
+
+    // If clicking the same lesson, just stop
+    if (currentlyPlaying === lessonId) {
+      setCurrentlyPlaying(null);
+      return;
+    }
+
+    // Create or get audio element
+    let audio = audioElements[lessonId];
+    if (!audio) {
+      audio = new Audio(audioFile);
+      audio.addEventListener('ended', () => setCurrentlyPlaying(null));
+      audio.addEventListener('error', (e) => {
+        console.error('Audio error:', e);
+        alert('Unable to play audio file. Please check if the file exists.');
+      });
+      setAudioElements(prev => ({ ...prev, [lessonId]: audio }));
+    }
+
+    // Play the audio
+    audio.play().then(() => {
+      setCurrentlyPlaying(lessonId);
+    }).catch((error) => {
+      console.error('Playback error:', error);
+      alert('Unable to play audio. This might be due to browser autoplay policies or missing audio files.');
+    });
+  };
+
+  const stopAudio = () => {
+    if (currentlyPlaying && audioElements[currentlyPlaying]) {
+      audioElements[currentlyPlaying].pause();
+      audioElements[currentlyPlaying].currentTime = 0;
+      setCurrentlyPlaying(null);
+    }
   };
 
   return (
@@ -151,7 +204,7 @@ export const CourseModules: React.FC = () => {
                         {module.lessons.map((lesson, lessonIndex) => (
                           <div
                             key={lessonIndex}
-                            className="flex items-center justify-between p-4 bg-gray-800 rounded-xl hover:bg-gray-750 transition-colors cursor-pointer group"
+                            className="flex items-center justify-between p-4 bg-gray-800 rounded-xl hover:bg-gray-750 transition-colors group"
                           >
                             <div className="flex items-center space-x-3">
                               <div className="w-10 h-10 bg-gray-700 rounded-lg flex items-center justify-center group-hover:bg-blue-600 transition-colors">
@@ -168,10 +221,33 @@ export const CourseModules: React.FC = () => {
                             </div>
                             <div className="flex items-center space-x-2">
                               {lesson.audioFile && (
-                                <audio controls className="max-w-xs">
-                                  <source src={lesson.audioFile} type="audio/mp4" />
-                                  Your browser does not support the audio element.
-                                </audio>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (currentlyPlaying === lesson.id) {
+                                      stopAudio();
+                                    } else {
+                                      playAudio(lesson.id!, lesson.audioFile);
+                                    }
+                                  }}
+                                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
+                                    currentlyPlaying === lesson.id
+                                      ? 'bg-red-600 hover:bg-red-700'
+                                      : 'bg-blue-600 hover:bg-blue-700'
+                                  }`}
+                                >
+                                  {currentlyPlaying === lesson.id ? (
+                                    <>
+                                      <Pause className="w-4 h-4" />
+                                      <span className="text-sm">Stop</span>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Play className="w-4 h-4" />
+                                      <span className="text-sm">Play</span>
+                                    </>
+                                  )}
+                                </button>
                               )}
                               <ChevronRight className="w-4 h-4 text-gray-500 group-hover:text-white" />
                             </div>
@@ -208,6 +284,22 @@ export const CourseModules: React.FC = () => {
           );
         })}
       </div>
+
+      {/* Currently Playing Indicator */}
+      {currentlyPlaying && (
+        <div className="fixed bottom-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg">
+          <div className="flex items-center space-x-2">
+            <Volume2 className="w-4 h-4" />
+            <span className="text-sm">Playing audio...</span>
+            <button
+              onClick={stopAudio}
+              className="ml-2 hover:bg-blue-700 rounded p-1"
+            >
+              <Pause className="w-3 h-3" />
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Progress Overview */}
       <div className="mt-12 bg-gray-800/50 rounded-2xl p-8 border border-gray-700">
