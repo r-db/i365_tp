@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Search, Menu, X, Target, Award, FileText, Home } from 'lucide-react';
+import logoImage from '../assets/IB (500 x 50 px) (350 x 50 px) (1).png';
 
 interface HeaderProps {
   activeSection: string;
@@ -28,11 +29,11 @@ export const Header: React.FC<HeaderProps> = ({ activeSection, setActiveSection 
               onClick={() => setActiveSection('overview')}
               className="cursor-pointer hover:opacity-80 transition-opacity"
             >
-              <span className="text-2xl font-bold">
-                <span className="text-[#4ade80]">Inbound</span>
-                <span className="text-white">AI</span>
-                <span className="text-[#6366f1]">365</span>
-              </span>
+              <img 
+                src={logoImage} 
+                alt="InboundAI365" 
+                className="h-8 w-auto"
+              />
             </div>
           </div>
 
