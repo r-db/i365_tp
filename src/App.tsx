@@ -12,7 +12,7 @@ function App() {
   const renderActiveSection = () => {
     switch (activeSection) {
       case 'overview':
-        return <Hero />;
+        return <Hero setActiveSection={setActiveSection} />;
       case 'courses':
         return <CourseModules />;
       case 'commission':
@@ -22,7 +22,7 @@ function App() {
       case 'certification':
         return <CertificationTracker />;
       default:
-        return <Hero />;
+        return <Hero setActiveSection={setActiveSection} />;
     }
   };
 

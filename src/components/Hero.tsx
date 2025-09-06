@@ -1,7 +1,11 @@
 import React from 'react';
 import { Play, Target, Zap, Users, TrendingUp } from 'lucide-react';
 
-export const Hero: React.FC = () => {
+interface HeroProps {
+  setActiveSection: (section: string) => void;
+}
+
+export const Hero: React.FC<HeroProps> = ({ setActiveSection }) => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       {/* Hero Section */}
@@ -20,11 +24,17 @@ export const Hero: React.FC = () => {
           Welcome to your comprehensive training platform. Here, you'll master the fundamentals of SaaS sales while diving deep into the revolutionary world of AI-powered solutions. Get ready to unlock your potential and drive unprecedented growth.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <button className="px-8 py-4 bg-[#1a5a1a] rounded-xl font-semibold hover:bg-[#0f3f0f] transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center">
+          <button 
+            onClick={() => setActiveSection('courses')}
+            className="px-8 py-4 bg-[#1a5a1a] rounded-xl font-semibold hover:bg-[#0f3f0f] transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center"
+          >
             <Play className="w-5 h-5 mr-2" />
             Start Training
           </button>
-          <button className="px-8 py-4 border border-gray-600 rounded-xl font-semibold hover:bg-gray-800 transition-all duration-200 flex items-center justify-center">
+          <button 
+            onClick={() => setActiveSection('certification')}
+            className="px-8 py-4 border border-gray-600 rounded-xl font-semibold hover:bg-gray-800 transition-all duration-200 flex items-center justify-center"
+          >
             <Target className="w-5 h-5 mr-2" />
             View Certification Path
           </button>

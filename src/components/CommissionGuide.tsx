@@ -19,7 +19,7 @@ const roles: Record<Role, RoleConfig> = {
     name: 'SaaS Account Executive',
     personalQuota: 60,
     teamQuota: 0,
-    personalSaleCommission: 350,
+    personalSaleCommission: 300,
     personalMrrCommission: 50,
     teamSaleOverride: 0,
     teamMrrOverride: 0,
